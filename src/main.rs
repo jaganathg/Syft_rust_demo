@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use std::fs::File;
 use std::fs;
 use std::io::Write;
 
@@ -11,39 +10,28 @@ struct Package {
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Sbom {
-    // list of artifacts
     artifacts: Vec<Package>,
 }
 
-
-fn main() {
-    // Try to read the sbom.json file and return a result.csv file with whitelist and blacklisted artifacts
-
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let whitelist = vec!["serde", "reqwest"];
     let blacklist = vec!["tokio"];
 
-    let sbom_data = fs::read_to_string("sbom.json")
-        .expect("failed to read sbom.json");
-    let sbom: Sbom = serde_json::from_str(&sbom_data)
-        .expect("failed to parse sbom.json");
+    let sbom_data = fs::read_to_string("sbom.json")?;
+    let sbom: Sbom = serde_json::from_str(&sbom_data)?;
 
-    let mut results = Vec::new();
+    let mut file = fs::File::create("results.csv")?;
 
     for package in sbom.artifacts {
-        if whitelist.contains(&package.name.as_str()) {
-            results.push(format!("{} is whitelisted", package.name));
+        let status = if whitelist.contains(&package.name.as_str()) {
+            "whitelisted"
         } else if blacklist.contains(&package.name.as_str()) {
-            results.push(format!("{} is blacklisted", package.name));
+            "blacklisted"
         } else {
-            results.push(format!("{} is not in whitelist or blacklist", package.name));
-        }
+            "not listed"
+        };
+        writeln!(file, "{} : {} --> {}", package.name, package.version, status)?;
     }
 
-    let mut file = File::create("results.csv")
-        .expect("failed to create file");
-
-    for result in results {
-        writeln!(file, "{}", result)
-            .expect("failed to write to file");
-    }
+    Ok(())
 }
