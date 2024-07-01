@@ -1,0 +1,19 @@
+-- db/init_db.sql
+
+CREATE TABLE IF NOT EXISTS whitelist (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    package TEXT NOT NULL,
+    version TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS blacklist (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    package TEXT NOT NULL,
+    version TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS current (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    package TEXT NOT NULL,
+    version TEXT NOT NULL
+);
