@@ -1,7 +1,8 @@
-#[allow(unused_imports)]
-use polars::prelude::*;
 use serde::{Deserialize, Serialize};
+use serde_json;
 use std::fs;
+use std::path::Path;
+use sqlx::SqlitePool;
 
 use database::{init, reader};
 use syfter::scan;
@@ -20,6 +21,19 @@ struct Sbom {
     artifacts: Vec<Package>,
 }
 
+#[derive(Deserialize, Serialize, Debug)]
+struct Component {
+    #[serde(rename = "bom-ref")]
+    bom_ref: String,
+    name: String,
+    version: String,
+    // other fields as necessary
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+struct CycloneDxSbom {
+    components: Vec<Component>,
+}
 
 #[tokio::main]
 async fn main() {
@@ -32,46 +46,61 @@ async fn main() {
     scan::run_grype_valner(&syft_output, &grype_output);
 
     let db_url = "db/packages.db";
+    let mut pool: Option<SqlitePool> = None;
 
+    // create database if not exist
+    if !Path::new(db_url).exists() {
+        println!("Database not found, initializing...");
+        init::initialize_db(db_url)
+            .await
+            .expect("Failed to initialize db");
+    } else {
+        println!("Database found, connecting...");
+        pool = Some(SqlitePool::connect(&db_url)
+            .await
+            .expect("Failed to connect to database"));
+    }
     // connect to database
-    let pool = init::initialize_db(db_url)
-        .await
-        .expect("Failed to initialize db");
+    // let pool = init::initialize_db(db_url)
+    //     .await
+    //     .expect("Failed to initialize db");
 
     // Add package and version to whitelist, ensuring no duplicates
-    let package_name = "serde";
-    let package_version = "1.0.203";
-    let exists = init::check_duplicates(&pool, package_name, package_version, "whitelist")
-        .await
-        .expect("Failed to check duplicates in whitelist");
-    if !exists {
-        init::add_to_table(&pool, package_name, package_version, "whitelist")
-            .await
-            .expect("Failed to add to whitelist");
-    }
+    // let package_name = "serde";
+    // let package_version = "1.0.203";
+    // let exists = init::check_duplicates(&pool, package_name, package_version, "whitelist")
+    //     .await
+    //     .expect("Failed to check duplicates in whitelist");
+    // if !exists {
+    //     init::add_to_table(&pool, package_name, package_version, "whitelist")
+    //         .await
+    //         .expect("Failed to add to whitelist");
+    // }
 
     // Add package and version to blacklist, ensuring no duplicates
-    let package_name = "tokio";
-    let package_version = "1.37.0";
-    let exists = init::check_duplicates(&pool, package_name, package_version, "blacklist")
-        .await
-        .expect("Failed to check duplicates in blacklist");
-    if !exists {
-        init::add_to_table(&pool, package_name, package_version, "blacklist")
-            .await
-            .expect("Failed to add to blacklist");
-    }
+    // let package_name = "tokio";
+    // let package_version = "1.37.0";
+    // let exists = init::check_duplicates(&pool, package_name, package_version, "blacklist")
+    //     .await
+    //     .expect("Failed to check duplicates in blacklist");
+    // if !exists {
+    //     init::add_to_table(&pool, package_name, package_version, "blacklist")
+    //         .await
+    //         .expect("Failed to add to blacklist");
+    // }
+
+    let pool = pool.unwrap();
 
     // Read and parse final.json
     let data = fs::read_to_string("syft_final.json").expect("Failed to read final.json");
-    let sbom: Sbom = serde_json::from_str(&data).expect("Failed to parse final.json");
+    let sbom: CycloneDxSbom = serde_json::from_str(&data).expect("Failed to parse final.json");
 
-    for package in sbom.artifacts {
-        let exists = init::check_duplicates(&pool, &package.name, &package.version, "current")
+    for component in sbom.components {
+        let exists = init::check_duplicates(&pool, &component.name, &component.version, "current")
             .await
             .expect("Failed to check duplicates");
         if !exists {
-            init::add_to_table(&pool, &package.name, &package.version, "current")
+            init::add_to_table(&pool, &component.name, &component.version, "current")
                 .await
                 .expect("Failed to add to current");
         }

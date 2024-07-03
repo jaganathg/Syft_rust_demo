@@ -7,7 +7,7 @@ use std::process::{Command, Stdio};
 pub fn run_syft_scan(target: &str, syft_output: &str, final_output: &str) {
     // run syft scan on target(project)
     let status = Command::new("syft")
-        .args(&[target, "-o", &format!("syft-json={}", syft_output)])
+        .args(&[target, "-o", &format!("cyclonedx-json={}", syft_output)])
         .status()
         .expect("Failed to run Syft scan");
 
