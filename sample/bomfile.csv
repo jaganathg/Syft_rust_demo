@@ -1,0 +1,464 @@
+name
+ACNPTX-Mindroid.java (Custom master)
+ACNPTX-Mindroid.java (Custom master)
+ahash
+alexcrichton/cfg-if
+alexcrichton/cfg-if
+alexcrichton/cmake-rs
+alexcrichton/proc-macro2
+alexcrichton/socket2-rs
+Android - kernel - tests (Custom)
+Android - platform - bootable - recovery
+Android - platform - build
+Android - platform - build - blueprint (Custom)
+Android - platform - build - kati (Custom)
+Android - platform - build - soong (Custom)
+Android - platform - external - ant-glob
+Android - platform - external - archive-patcher (Custom)
+Android - platform - external - blktrace
+Android - platform - external - boringssl (Custom)
+Android - platform - external - boringssl (Custom)
+Android - platform - external - boringssl (Custom)
+Android - platform - external - bouncycastle
+Android - platform - external - bouncycastle
+Android - platform - external - bsdiff
+Android - platform - external - bsdiff
+Android - platform - external - bzip2
+Android - platform - external - chromium - android_tools - sdk (Custom)
+Android - platform - external - clang
+Android - platform - external - compiler-rt
+Android - platform - external - conscrypt
+Android - platform - external - cros - system_api (Custom)
+Android - platform - external - curl (Custom)
+Android - platform - external - dhcpcd-6.8.2 (Custom)
+Android - platform - external - dhcpcd-6.8.2 (Custom)
+Android - platform - external - dhcpcd-6.8.2 (Custom)
+Android - platform - external - e2fsprogs
+Android - platform - external - easymock
+Android - platform - external - elfutils
+Android - platform - external - expat
+Android - platform - external - expat
+Android - platform - external - f2fs-tools
+Android - platform - external - fec (Custom)
+Android - platform - external - google-benchmark (Custom)
+Android - platform - external - icu
+Android - platform - external - iproute2
+Android - platform - external - iputils
+Android - platform - external - jemalloc
+Android - platform - external - jsoncpp
+Android - platform - external - kernel-headers
+Android - platform - external - ksoap2
+Android - platform - external - libbrillo (Custom)
+Android - platform - external - libbrillo (Custom)
+Android - platform - external - libcap (Custom)
+Android - platform - external - libconstrainedcrypto (Custom)
+Android - platform - external - libcxx
+Android - platform - external - libcxxabi
+Android - platform - external - libdaemon (Custom)
+Android - platform - external - libdivsufsort (Custom)
+Android - platform - external - libevent (Custom)
+Android - platform - external - libpcap
+Android - platform - external - libpcap
+Android - platform - external - libpcap
+Android - platform - external - libpcap
+Android - platform - external - libpcap
+Android - platform - external - libunwind
+Android - platform - external - libunwind_llvm (Custom)
+Android - platform - external - libvterm
+Android - platform - external - libxml2
+Android - platform - external - llvm
+Android - platform - external - llvm
+Android - platform - external - lzma
+Android - platform - external - mdnsresponder
+Android - platform - external - mdnsresponder
+Android - platform - external - minijail (Custom)
+Android - platform - external - mksh
+Android - platform - external - netcat
+Android - platform - external - pcre
+Android - platform - external - protobuf
+Android - platform - external - python - cpython2 (Custom)
+Android - platform - external - python - cpython2 (Custom)
+Android - platform - external - python - cpython2 (Custom)
+Android - platform - external - rootdev (Custom)
+Android - platform - external - safe-iop
+Android - platform - external - scrypt
+Android - platform - external - selinux (Custom)
+Android - platform - external - selinux (Custom)
+Android - platform - external - selinux (Custom)
+Android - platform - external - sfntly
+Android - platform - external - shflags (Custom)
+Android - platform - external - snakeyaml (Custom)
+Android - platform - external - squashfs-tools (Custom)
+Android - platform - external - strace
+Android - platform - external - tcpdump
+Android - platform - external - tcpdump
+Android - platform - external - tcpdump
+Android - platform - external - tcpdump
+Android - platform - external - tinyalsa
+Android - platform - external - tinycompress
+Android - platform - external - tinyxml2
+Android - platform - external - toybox (Custom)
+Android - platform - external - valgrind
+Android - platform - external - vboot_reference (Custom)
+Android - platform - external - vixl
+Android - platform - external - zlib
+Android - platform - hardware - libhardware_legacy
+Android - platform - libnativehelper
+Android - platform - pdk
+Android - platform - prebuilts - clang - host - linux-x86 (Custom)
+Android - platform - prebuilts - clang - host - linux-x86 (Custom)
+Android - platform - prebuilts - clang - host - linux-x86 (Custom)
+Android - platform - prebuilts - clang-tools (Custom)
+Android - platform - prebuilts - gcc - linux-x86 - aarch64 - aarch64-linux-android-4.9
+Android - platform - prebuilts - gcc - linux-x86 - arm - arm-linux-androideabi-4.9 (Custom)
+Android - platform - prebuilts - go - linux-x86 (Custom)
+Android - platform - prebuilts - go - linux-x86 (Custom)
+Android - platform - prebuilts - ndk
+Android - platform - prebuilts - ndk
+Android - platform - prebuilts - ndk
+Android - platform - system - core
+Android - platform - system - core
+Android - platform - system - core
+Android - platform - system - core
+Android - platform - system - extras
+Android - platform - system - gatekeeper (Custom)
+Android - platform - system - keymaster
+Android - platform - system - netd
+Android - platform - system - security
+Android - platform - system - sepolicy (Custom)
+Android - platform - system - tools - aidl (Custom)
+Android - platform - system - tools - hidl (Custom)
+Android - platform - system - vold
+android_system_properties
+android-logd-logger
+Apache Commons Codec
+Apache Commons Codec
+Apache Commons Lang
+Apache Commons Logging
+Apache HttpClient
+Apache HttpComponents
+arm-trusted-firmware
+arm-trusted-firmware
+arm-trusted-firmware
+array-init
+async-trait
+autocfg
+bitflags
+block-buffer
+Bouncy Castle
+Bouncy Castle
+Bouncy Castle
+Bouncy Castle ASN.1 Extension and Utility APIs
+BurntSushi/regex-automata
+BurntSushi/rust-memchr
+cc-rs
+clap_derive (Custom)
+clap_derive (Custom)
+clap-rs/clap
+colin-kiegel/rust-derive-builder
+const_fn
+contain-rs/vec-map
+cpufeatures
+crossbeam-channel
+crossbeam-deque
+crossbeam-epoch
+crossbeam-utils
+cxx
+cxxbridge-flags
+cxxbridge-macro
+cxx-build
+Dagger 2
+danburkert/prost
+dguo/strsim-rs
+doc-comment
+dtolnay/itoa
+dtolnay/quote
+dtolnay/ryu
+enum-iterator
+enum-iterator-derive
+fixedbitset
+FreeRTOS Real Time Kernel
+futures-task
+generic-array
+getrandom
+getset
+GNU Compiler Collection
+google-gson
+google-gson
+google-gson
+google-gson
+Graal
+harryfei/which-rs
+HiveMQ MQTT Client
+http-auth-basic
+hyperium/http
+hyperium/http-body
+ianlancetaylor/libbacktrace
+Java Concurrency Tools Core Library
+Java Servlet API
+javax.annotation API
+javax.annotation API
+javax.inject:javax.inject
+jeromefroe/lru-rs
+Jetty :: Aggregate :: All Core Jetty
+Jetty Core :: Proxy
+JOpt Simple
+JsonCpp
+kernlog
+kXML
+libpnet
+libpnet
+libudev
+link-cplusplus
+Linux Kernel
+lwIP
+matklad/once_cell
+maybe-uninit
+Mindroid.cpp
+mosquitto
+mosquitto-plugin
+multimap
+nagisa/rust_libloading
+native-platform
+native-platform
+Netty Project
+Netty Project
+Netty Project
+Netty Project
+Netty Project
+Netty Project
+Netty Project
+Netty Project
+Netty Project
+nix-rust/nix
+no-std-net
+num_cpus
+num-derive
+num-traits
+ogham/rust-users
+OpenSSL
+OpenSSL
+openssl-macros
+optee
+optee
+optee
+optee_client
+os_str_bytes
+paho.mqtt.java
+paholg/typenum
+parking_lot
+parking_lot
+peeking_take_while
+petgraph
+pin-project
+pin-project-internal
+pin-utils
+pkg-config
+platform_art
+platform_bionic
+platform_bionic
+platform_bionic
+platform_bionic
+platform_bionic
+platform_bionic
+platform_development
+platform_development
+platform_external_iptables
+platform_hardware_libhardware
+platform-external-avb
+platform-external-avb
+platform-external-brotli
+platform-external-googletest
+platform-external-libbackup
+platform-external-libchrome
+platform-external-libchrome
+platform-external-libchrome
+platform-external-modp_b64
+platform-external-puffin
+platform-external-xz-embedded
+platform-hardware-interfaces
+platform-hardware-interfaces
+platform-hardware-interfaces
+platform-system-hwservicemanager
+platform-system-libfmq
+platform-system-libhidl
+platform-system-libhwbinder
+platform-system-libufdt
+platform-system-libvintf
+platform-system-timezone
+platform-system-update_engine
+proc-macro-error
+prost-build
+prost-derive
+prost-types
+Protobuf, Protobuf/CPP, protobuf-java
+Protobuf, Protobuf/CPP, protobuf-java
+proxy-protocol
+rayon
+rayon
+reactive-streams
+reem/rust-void
+regex-syntax
+richgel999/miniz
+rust-aho-corasick
+rust-ansi-term
+rust-anyhow
+rust-async-stream
+rust-async-stream-impl
+rust-atty
+rust-base64
+rust-bstr
+rust-byteorder
+rust-cexpr
+rustc-hash
+rust-chrono
+rust-clang-sys
+rust-clap_lex
+rust-clap_lex
+rust-crc32fast
+RustCrypto/hashes
+rust-crypto-common
+rust-csv
+rust-csv-core
+rust-darling
+rust-darling-core
+rust-darling-macro
+rust-derive_builder_core
+rust-derive_builder_macro
+rust-devicemapper
+rust-digest
+rust-either
+rust-embedded/rust-sysfs-gpio
+rust-env-logger
+rust-errno
+rust-fastrand
+rust-fnv
+rust-foreign-types
+rust-foreign-types-shared
+rust-form-urlencoded
+rust-futures-channel
+rust-futures-executor
+rust-futures-io
+rust-futures-macro
+rust-futures-sink
+rust-glob
+rust-heck
+rust-heck
+rust-hex
+rust-httpdate
+rust-humantime
+rust-hyper
+rust-iana-time-zone
+rust-ident-case
+rust-indexmap
+rust-itertools
+rust-json
+rust-lang/hashbrown
+rust-lang/rust-bindgen
+rust-lang-nursery/futures-rs
+rust-lang-nursery/futures-rs
+rust-lang-nursery/futures-rs
+rust-lazycell
+rust-lazy-static
+rust-libc
+rust-libudev-sys
+rust-lock-api
+rust-log
+rust-memoffset
+rust-minimal-lexical
+rust-mio
+rust-nodrop
+rust-nom
+rust-num-integer
+rust-openssl
+rust-percent-encoding
+rust-phf
+rust-phf_shared
+rust-phf-codegen
+rust-phf-generator
+rust-phf-macros
+rust-pin-project-lite
+rust-pnet_datalink (Custom)
+rust-ppv-lite86
+rust-proc-macro-error-attr
+rust-proc-macro-hack
+rust-protobuf
+rust-protobuf
+rust-protobuf
+rust-protobuf
+rust-rand
+rust-rand
+rust-rand-core
+rust-regex
+rust-scopeguard
+rust-semver
+rust-serde
+rust-serde-derive
+rust-shlex
+rust-signal-hook-registry
+rust-siphasher
+rust-snafu
+rust-snafu-derive
+rust-structopt
+rust-structopt-derive
+rust-syn
+rust-termcolor
+rust-textwrap
+rust-tinyvec-macros
+rust-tokio-openssl
+rust-unicode-normalization
+rust-unicode-width
+rust-url
+rustversion
+rust-zeroize
+RxJava
+scratch
+seanmonstar/httparse
+seanmonstar/try-lock
+seanmonstar/want
+serde_json
+serde-hex
+SergioBenitez/version_check
+serialport
+servo/rust-smallvec
+servo/rust-smallvec
+servo/unicode-bidi
+sha2-asm
+size
+slab
+SLF4J API Module
+standback
+Stebalien/tempfile
+strum-rs
+strum-rs
+The Linux PTP Project
+thiserror-impl
+time
+time
+time-macros
+time-macros-impl
+tinyvec
+tokio
+tokio
+tokio
+tokio
+tokio
+tokio-fd
+tokio-rs/bytes
+toml-rs
+toolchain-prebuilts-ndk-r19
+toolchain-prebuilts-ndk-r19
+toolchain-prebuilts-ndk-r19
+toolchain-prebuilts-ndk-r19
+toolchain-prebuilts-ndk-r19
+tower-rs/tower
+tracing
+tracing-core
+U-Boot
+U-Boot
+U-Boot
+unicode-ident
+unicode-rs/unicode-segmentation
+vergen
+WebSocket API
+XAMPPRocky/remove_dir_all

@@ -1,13 +1,13 @@
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use std::fs::File;
-use std::io::{self, Write};
-use std::process::{Command, Output, Stdio};
+use std::io::Write;
+use std::process::{Command, Stdio};
 
 pub fn run_syft_scan(target: &str, syft_output: &str, final_output: &str) {
     // run syft scan on target(project)
     let status = Command::new("syft")
-        .args(&[target, "-o", "syft-json", "--file", syft_output])
+        .args(&[target, "-o", &format!("syft-json={}", syft_output)])
         .status()
         .expect("Failed to run Syft scan");
 
@@ -41,23 +41,10 @@ pub fn run_syft_scan(target: &str, syft_output: &str, final_output: &str) {
 pub fn run_grype_valner(target: &str, output: &str) {
     let status = Command::new("grype")
         .args(&[&format!("sbom:{}", target), "--file", output])
-        .output();
+        .status()
+        .expect("Failed to run Grype valner");
 
-    match status {
-        Ok(Output {
-            status,
-            stdout,
-            stderr,
-        }) => {
-            io::stdout().write_all(&stdout).unwrap();
-            io::stderr().write_all(&stderr).unwrap();
-
-            if !status.success() {
-                eprintln!("Grype valner failed with exit code: {}", status);
-            }
-        }
-        Err(e) => {
-            eprintln!("Failed to execute Grype valner: {}", e);
-        }
+    if !status.success() {
+        eprintln!("Grype valner failed");
     }
 }
