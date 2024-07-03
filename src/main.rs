@@ -109,13 +109,14 @@ async fn main() {
     println!("Database initialized and data added successfully");
 
     // read database and print the tables
-    reader::read_database(&pool)
-        .await
-        .expect("Failed to read database");
+    // reader::read_database(&pool)
+    //     .await
+    //     .expect("Failed to read database");
 
-    reader::read_database_polars(&pool, "current")
+    let current_df = reader::read_dataframe(&pool, "current")
         .await
         .expect("Failed to read database using Polars");
+    println!("{:?}", current_df);
 
     // drop table
     // database::drop_table(&pool, "whitelist")
