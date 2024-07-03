@@ -1,3 +1,4 @@
+#[allow(unused_imports)]
 use polars::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -17,36 +18,16 @@ struct Sbom {
     artifacts: Vec<Package>,
 }
 
-// fn main() -> Result<(), Box<dyn std::error::Error>> {
-//     let whitelist = vec!["serde", "reqwest"];
-//     let blacklist = vec!["tokio"];
-
-//     let sbom_data = fs::read_to_string("sbom.json")?;
-//     let sbom: Sbom = serde_json::from_str(&sbom_data)?;
-
-//     let mut file = fs::File::create("results.csv")?;
-
-//     for package in sbom.artifacts {
-//         let status = if whitelist.contains(&package.name.as_str()) {
-//             "whitelisted"
-//         } else if blacklist.contains(&package.name.as_str()) {
-//             "blacklisted"
-//         } else {
-//             "not listed"
-//         };
-//         writeln!(file, "{} : {} --> {}", package.name, package.version, status)?;
-//     }
-
-//     Ok(())
-// }
 
 #[tokio::main]
 async fn main() {
     let target = "/Users/jaganath.gajendran/Documents/J_Study/GitHub/Rust/Diesel_Sqlite_Demo";
-    let syft_output = "sbom.json";
-    let final_output = "final.json";
+    let inter_output = "sbom.json";
+    let syft_output = "syft_final.json";
+    let grype_output = "grype_final.csv";
 
-    syfter::run_syft_scan(target, syft_output, final_output);
+    syfter::run_syft_scan(target, inter_output, &syft_output);
+    syfter::run_grype_valner(&syft_output, &grype_output);
 
     let db_url = "db/packages.db";
 
@@ -80,7 +61,7 @@ async fn main() {
     }
 
     // Read and parse final.json
-    let data = fs::read_to_string("final.json").expect("Failed to read final.json");
+    let data = fs::read_to_string("syft_final.json").expect("Failed to read final.json");
     let sbom: Sbom = serde_json::from_str(&data).expect("Failed to parse final.json");
 
     for package in sbom.artifacts {

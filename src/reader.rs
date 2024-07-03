@@ -1,7 +1,9 @@
+#[allow(unused_imports)]
 use polars::prelude::*;
 use sqlx::sqlite::SqlitePool;
 use sqlx::Row;
 
+#[allow(dead_code)]
 pub async fn read_database(pool: &SqlitePool) -> Result<(), sqlx::Error> {
     // Print whitelist table
     let rows = sqlx::query("SELECT * FROM whitelist")
@@ -39,18 +41,19 @@ pub async fn read_database(pool: &SqlitePool) -> Result<(), sqlx::Error> {
 
 pub async fn read_database_polars(pool: &SqlitePool, table_name: &str) -> Result<(), sqlx::Error> {
     let query = format!("SELECT * FROM {}", table_name);
-    let rows = sqlx::query_as::<_, (String, String)>(&query)
+    let rows: Vec<(i32, String, String)> = sqlx::query_as(&query)
         .fetch_all(pool)
         .await?;
 
-    let names: Vec<&str> = rows.iter().map(|(name, _)| name.as_str()).collect();
-    let versions: Vec<&str> = rows.iter().map(|(_, version)| version.as_str()).collect();
+    let ids: Vec<i32> = rows.iter().map(|(id, _, _)| *id).collect();
+    let names: Vec<&str> = rows.iter().map(|(_, name, _)| name.as_str()).collect();
+    let versions: Vec<&str> = rows.iter().map(|(_, _, version)| version.as_str()).collect();
 
     let df = DataFrame::new(vec![
-        Series::new("package", names),
+        Series::new("id", ids),
+        Series::new("name", names),
         Series::new("version", versions),
-    ])
-    .expect("Failed to create DataFrame");
+    ]).expect("Failed to create DataFrame");
 
     println!("{:?}", df);
     Ok(())

@@ -1,3 +1,4 @@
+#[allow(unused_imports)]
 use sqlx::{query, SqlitePool};
 use std::fs;
 use std::path::Path;
@@ -65,6 +66,7 @@ pub async fn add_to_table(
     Ok(())
 }
 
+#[allow(dead_code)]
 pub async fn drop_table(pool: &SqlitePool, table_name: &str) -> Result<(), sqlx::Error> {
     let qry = format!("DROP TABLE IF EXISTS {}", table_name);
     query(&qry).execute(pool).await?;
