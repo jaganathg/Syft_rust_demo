@@ -17,3 +17,10 @@ CREATE TABLE IF NOT EXISTS current (
     package TEXT NOT NULL,
     version TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS component (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    version TEXT NOT NULL,
+    type TEXT NOT NULL
+);

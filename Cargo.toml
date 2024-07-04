@@ -4,9 +4,22 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-polars = { version = "0.41.2", features = ["lazy"] }
+polars = { version = "0.41.2", features = ["lazy", "serde"] }
 reqwest = "0.12.5"
 serde = { version = "1.0.203", features = ["derive"] }
 serde_json = "1.0.117"
 sqlx = { version = "0.7.4", features = ["runtime-tokio-native-tls", "sqlite"] }
 tokio = { version = "1.38.0", features = ["full"] }
+
+
+[[bin]]
+name = "main"
+path = "src/main.rs"
+
+[[bin]]
+name = "init_db"
+path = "src/database/init.rs"
+
+[[bin]]
+name = "json_df"
+path = "src/database/reader.rs"

@@ -1,7 +1,14 @@
-#[allow(unused_imports)]
 use sqlx::{query, SqlitePool};
+use sqlx::{sqlite::SqlitePoolOptions, Error};
 use std::fs;
 use std::path::Path;
+use tokio;
+
+#[allow(dead_code)]
+#[tokio::main]
+async fn main() -> Result<(), Error> {
+    run().await
+}
 
 pub async fn initialize_db(db_url: &str) -> Result<SqlitePool, sqlx::Error> {
     // create database if not exist
@@ -48,47 +55,16 @@ pub async fn initialize_db(db_url: &str) -> Result<SqlitePool, sqlx::Error> {
     Ok(pool)
 }
 
-pub async fn add_to_table(
-    pool: &SqlitePool,
-    package: &str,
-    version: &str,
-    table_name: &str,
-) -> Result<(), sqlx::Error> {
-    let qry = format!(
-        "INSERT INTO {} (package, version) VALUES (?, ?)",
-        table_name
-    );
-    query(&qry)
-        .bind(package)
-        .bind(version)
-        .execute(pool)
-        .await?;
-    Ok(())
-}
+async fn run() -> Result<(), Error> {
+    let init_table = fs::read_to_string("db/init_db.sql").expect("Failed to read init_db.sql file");
 
-#[allow(dead_code)]
-pub async fn drop_table(pool: &SqlitePool, table_name: &str) -> Result<(), sqlx::Error> {
-    let qry = format!("DROP TABLE IF EXISTS {}", table_name);
-    query(&qry).execute(pool).await?;
-    println!("Table {} dropped successfully!", table_name);
-    Ok(())
-}
-
-pub async fn check_duplicates(
-    pool: &SqlitePool,
-    package: &str,
-    version: &str,
-    table_name: &str,
-) -> Result<bool, sqlx::Error> {
-    let qry = format!(
-        "SELECT COUNT(*) FROM {} WHERE package = ? AND version = ?",
-        table_name
-    );
-    let result = sqlx::query_scalar::<_, i64>(&qry)
-        .bind(package)
-        .bind(version)
-        .fetch_one(pool)
+    let pool = SqlitePoolOptions::new()
+        .connect("sqlite://db/packages.db")
         .await?;
 
-    Ok(result > 0)
+    sqlx::query(&init_table).execute(&pool).await?;
+
+    println!("Database initialized successfully.");
+
+    Ok(())
 }

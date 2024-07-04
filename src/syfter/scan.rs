@@ -37,7 +37,6 @@ pub fn run_syft_scan(target: &str, syft_output: &str, final_output: &str) {
         .expect("Failed to write final_output file");
 }
 
-
 pub fn run_grype_valner(target: &str, output: &str) {
     let status = Command::new("grype")
         .args(&[&format!("sbom:{}", target), "--file", output])

@@ -1,10 +1,10 @@
 use serde::{Deserialize, Serialize};
 use serde_json;
+use sqlx::SqlitePool;
 use std::fs;
 use std::path::Path;
-use sqlx::SqlitePool;
 
-use database::{init, reader};
+use database::{action, init, reader};
 use syfter::scan;
 
 mod database;
@@ -56,9 +56,11 @@ async fn main() {
             .expect("Failed to initialize db");
     } else {
         println!("Database found, connecting...");
-        pool = Some(SqlitePool::connect(&db_url)
-            .await
-            .expect("Failed to connect to database"));
+        pool = Some(
+            SqlitePool::connect(&db_url)
+                .await
+                .expect("Failed to connect to database"),
+        );
     }
     // connect to database
     // let pool = init::initialize_db(db_url)
@@ -96,11 +98,12 @@ async fn main() {
     let sbom: CycloneDxSbom = serde_json::from_str(&data).expect("Failed to parse final.json");
 
     for component in sbom.components {
-        let exists = init::check_duplicates(&pool, &component.name, &component.version, "current")
-            .await
-            .expect("Failed to check duplicates");
+        let exists =
+            action::check_duplicates(&pool, &component.name, &component.version, "current")
+                .await
+                .expect("Failed to check duplicates");
         if !exists {
-            init::add_to_table(&pool, &component.name, &component.version, "current")
+            action::add_to_table(&pool, &component.name, &component.version, "current")
                 .await
                 .expect("Failed to add to current");
         }
@@ -113,10 +116,15 @@ async fn main() {
     //     .await
     //     .expect("Failed to read database");
 
-    let current_df = reader::read_dataframe(&pool, "current")
+    let current_df = reader::read_table_dataframe(&pool, "current")
         .await
         .expect("Failed to read database using Polars");
     println!("{:?}", current_df);
+
+    let component_df = reader::read_table_dataframe(&pool, "component")
+        .await
+        .expect("Failed to read database using Polars");
+    println!("{:?}", component_df);
 
     // drop table
     // database::drop_table(&pool, "whitelist")
