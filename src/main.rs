@@ -4,11 +4,13 @@ use sqlx::SqlitePool;
 use std::fs;
 use std::path::Path;
 
-use database::{action, init, reader};
-use syfter::scan;
+use database::{action, init};
+use scanner::scan;
+use reader::read;
 
 mod database;
-mod syfter;
+mod scanner;
+mod reader;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Package {
@@ -116,12 +118,12 @@ async fn main() {
     //     .await
     //     .expect("Failed to read database");
 
-    let current_df = reader::read_table_dataframe(&pool, "current")
+    let current_df = read::read_table_dataframe(&pool, "current")
         .await
         .expect("Failed to read database using Polars");
     println!("{:?}", current_df);
 
-    let component_df = reader::read_table_dataframe(&pool, "component")
+    let component_df = read::read_table_dataframe(&pool, "component")
         .await
         .expect("Failed to read database using Polars");
     println!("{:?}", component_df);

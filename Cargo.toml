@@ -23,4 +23,4 @@ path = "src/database/init.rs"
 
 [[bin]]
 name = "json_df"
-path = "src/database/reader.rs"
+path = "src/reader/read.rs"
