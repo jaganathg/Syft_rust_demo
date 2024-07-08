@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+clap = { version = "4.5.8", features = ["derive"] }
 polars = { version = "0.41.2", features = ["lazy", "serde"] }
 reqwest = "0.12.5"
 serde = { version = "1.0.203", features = ["derive"] }
