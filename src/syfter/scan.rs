@@ -39,7 +39,7 @@ pub fn run_syft_scan(target: &str, syft_output: &str, final_output: &str) {
 
 pub fn run_grype_valner(target: &str, output: &str) {
     let status = Command::new("grype")
-        .args(&[&format!("sbom:{}", target), "--file", output])
+        .args(&[&format!("sbom:{}", target), "-o", "json", "--file", output])
         .status()
         .expect("Failed to run Grype valner");
 

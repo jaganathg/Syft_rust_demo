@@ -1,0 +1,213 @@
+{
+ "matches": [
+  {
+   "vulnerability": {
+    "id": "GHSA-g98v-hv3f-hcfr",
+    "dataSource": "https://github.com/advisories/GHSA-g98v-hv3f-hcfr",
+    "namespace": "github:language:rust",
+    "severity": "Low",
+    "urls": [
+     "https://github.com/advisories/GHSA-g98v-hv3f-hcfr"
+    ],
+    "description": "atty potential unaligned read",
+    "cvss": [],
+    "fix": {
+     "versions": [],
+     "state": "not-fixed"
+    },
+    "advisories": []
+   },
+   "relatedVulnerabilities": [],
+   "matchDetails": [
+    {
+     "type": "exact-direct-match",
+     "matcher": "rust-matcher",
+     "searchedBy": {
+      "language": "rust",
+      "namespace": "github:language:rust",
+      "package": {
+       "name": "atty",
+       "version": "0.2.14"
+      }
+     },
+     "found": {
+      "versionConstraint": "<=0.2.14 (unknown)",
+      "vulnerabilityID": "GHSA-g98v-hv3f-hcfr"
+     }
+    }
+   ],
+   "artifact": {
+    "id": "2f5bcd903487fede",
+    "name": "atty",
+    "version": "0.2.14",
+    "type": "rust-crate",
+    "locations": [
+     {
+      "path": "/Cargo.lock"
+     }
+    ],
+    "language": "rust",
+    "licenses": [],
+    "cpes": [
+     "cpe:2.3:a:atty:atty:0.2.14:*:*:*:*:*:*:*"
+    ],
+    "purl": "pkg:cargo/atty@0.2.14",
+    "upstreams": []
+   }
+  }
+ ],
+ "source": {
+  "type": "file",
+  "target": "/Users/jaganath.gajendran/Documents/J_Study/GitHub/Rust/Diesel_Sqlite_Demo"
+ },
+ "distro": {
+  "name": "",
+  "version": "",
+  "idLike": null
+ },
+ "descriptor": {
+  "name": "grype",
+  "version": "0.79.2",
+  "configuration": {
+   "output": [
+    "json"
+   ],
+   "file": "grype_final.json",
+   "distro": "",
+   "add-cpes-if-none": false,
+   "output-template-file": "",
+   "check-for-app-update": true,
+   "only-fixed": false,
+   "only-notfixed": false,
+   "ignore-wontfix": "",
+   "platform": "",
+   "search": {
+    "scope": "squashed",
+    "unindexed-archives": false,
+    "indexed-archives": true
+   },
+   "ignore": [
+    {
+     "vulnerability": "",
+     "reason": "",
+     "namespace": "",
+     "fix-state": "",
+     "package": {
+      "name": "kernel-headers",
+      "version": "",
+      "language": "",
+      "type": "rpm",
+      "location": "",
+      "upstream-name": "kernel"
+     },
+     "vex-status": "",
+     "vex-justification": "",
+     "match-type": "exact-indirect-match"
+    },
+    {
+     "vulnerability": "",
+     "reason": "",
+     "namespace": "",
+     "fix-state": "",
+     "package": {
+      "name": "linux-headers-.*",
+      "version": "",
+      "language": "",
+      "type": "deb",
+      "location": "",
+      "upstream-name": "linux"
+     },
+     "vex-status": "",
+     "vex-justification": "",
+     "match-type": "exact-indirect-match"
+    },
+    {
+     "vulnerability": "",
+     "reason": "",
+     "namespace": "",
+     "fix-state": "",
+     "package": {
+      "name": "linux-libc-dev",
+      "version": "",
+      "language": "",
+      "type": "deb",
+      "location": "",
+      "upstream-name": "linux"
+     },
+     "vex-status": "",
+     "vex-justification": "",
+     "match-type": "exact-indirect-match"
+    }
+   ],
+   "exclude": [],
+   "db": {
+    "cache-dir": "/Users/jaganath.gajendran/Library/Caches/grype/db",
+    "update-url": "https://toolbox-data.anchore.io/grype/databases/listing.json",
+    "ca-cert": "",
+    "auto-update": true,
+    "validate-by-hash-on-start": false,
+    "validate-age": true,
+    "max-allowed-built-age": 432000000000000,
+    "update-available-timeout": 30000000000,
+    "update-download-timeout": 120000000000
+   },
+   "externalSources": {
+    "enable": false,
+    "maven": {
+     "searchUpstreamBySha1": true,
+     "baseUrl": "https://search.maven.org/solrsearch/select"
+    }
+   },
+   "match": {
+    "java": {
+     "using-cpes": false
+    },
+    "dotnet": {
+     "using-cpes": false
+    },
+    "golang": {
+     "using-cpes": false,
+     "always-use-cpe-for-stdlib": true,
+     "allow-main-module-pseudo-version-comparison": false
+    },
+    "javascript": {
+     "using-cpes": false
+    },
+    "python": {
+     "using-cpes": false
+    },
+    "ruby": {
+     "using-cpes": false
+    },
+    "rust": {
+     "using-cpes": false
+    },
+    "stock": {
+     "using-cpes": true
+    }
+   },
+   "fail-on-severity": "",
+   "registry": {
+    "insecure-skip-tls-verify": false,
+    "insecure-use-http": false,
+    "auth": null,
+    "ca-cert": ""
+   },
+   "show-suppressed": false,
+   "by-cve": false,
+   "name": "",
+   "default-image-pull-source": "",
+   "vex-documents": [],
+   "vex-add": [],
+   "match-upstream-kernel-headers": false
+  },
+  "db": {
+   "built": "2024-07-08T01:31:01Z",
+   "schemaVersion": 5,
+   "location": "/Users/jaganath.gajendran/Library/Caches/grype/db/5",
+   "checksum": "sha256:423172473c5310e6de1ebae4103c097599f5193aff38cbd7afa549f687bcba92",
+   "error": null
+  },
+  "timestamp": "2024-07-08T14:20:39.583336+02:00"
+ }
+}

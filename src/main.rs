@@ -40,7 +40,7 @@ async fn main() {
     let target = "/Users/jaganath.gajendran/Documents/J_Study/GitHub/Rust/Diesel_Sqlite_Demo";
     let inter_output = "sbom.json";
     let syft_output = "syft_final.json";
-    let grype_output = "grype_final.csv";
+    let grype_output = "grype_final.json";
 
     scan::run_syft_scan(target, inter_output, &syft_output);
     scan::run_grype_valner(&syft_output, &grype_output);
