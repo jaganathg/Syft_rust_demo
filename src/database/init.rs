@@ -2,8 +2,9 @@ use sqlx::{query, SqlitePool};
 use sqlx::{sqlite::SqlitePoolOptions, Error};
 use std::{fs, process};
 use std::path::Path;
-use tokio;
 use clap::{Arg, Command};
+
+
 
 
 #[allow(dead_code)]

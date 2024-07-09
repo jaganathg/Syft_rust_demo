@@ -1,6 +1,8 @@
 #[allow(unused_imports)]
 use polars::prelude::*;
+#[allow(unused_imports)]
 use serde::Deserialize;
+#[allow(unused_imports)]
 use serde_json::Value;
 use sqlx::sqlite::SqliteRow;
 use sqlx::{Column, Row, SqlitePool};
@@ -10,23 +12,106 @@ use std::error::Error;
 use std::fs::File;
 #[allow(unused_imports)]
 use std::io::BufReader;
+#[allow(unused_imports)]
 use tokio::fs::File as TokioFile;
+#[allow(unused_imports)]
 use tokio::io::AsyncReadExt;
 
+use crate::bd_reader::*;
+use crate::sy_reader::*;
+
+mod bd_reader;
+mod sy_reader;
 
 #[allow(dead_code)]
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // let file_path = "sample/sbom_2024-04-29_074207.cdx.cleaned.json";
-    let file_path = "sample/sbom_2024-04-29_074207.cdx.json";
-    let df = read_json_dataframe(file_path).await?;
+    let file_path_clean = "sample/sbom_2024-04-29_074207.cdx.cleaned.json";
+    let file_path_complete = "sample/sbom_2024-04-29_074207.cdx.json";
+    let file_path_syft = "sample/0031_syfts.json";
 
-    println!("{:?}", df);
+    let clean_sbom_df = read_sbom_bd_dataframe(&file_path_clean).await?;
+    let complete_sbom_df = read_sbom_bd_dataframe(&file_path_complete).await?;
+    // let syft_df = read_json_dataframe(&file_path_syft).await?;
+
+    let clean_vuln_df = read_vulner_bd_dataframe(&file_path_clean).await?;
+    let complete_vuln_df = read_vulner_bd_dataframe(&file_path_complete).await?;
+
+    let syft_sbom_df = read_sbom_sy_dataframe(&file_path_syft).await?;
+
+    println!(" BD clean sbom");
+    println!("{:?}", clean_sbom_df);
+    println!(" BD complete sbom");
+    println!("{:?}", complete_sbom_df);
+    println!(" SY complete sbom");
+    println!("{:?}", syft_sbom_df);
+
+    let joined_df = complete_sbom_df.left_join(&clean_sbom_df, ["name"], ["name"])?;
+
+    let non_matching_df = joined_df
+        .filter(&joined_df.column("type_right")?.is_null())?
+        .select(&["name", "version", "type", "licenses", "supplier", "purl"])?;
+
+    // let joined_df = complete_df.join(&clean_df, &["name"], &["name"], JoinArgs {how: JoinType::Full, ..Default::default() })?;
+
+    // let non_matching_df = joined_df.filter(
+    //     &joined_df.column("type_right")?.is_null() ,
+    // )?;
+    // method 1
+    let sy_bd_clean_df = clean_sbom_df.join(&syft_sbom_df, ["name", "version", "type"], ["name", "version", "type"], JoinType::Inner.into())?; 
+    let sy_bd_complete_df = complete_sbom_df.join(&syft_sbom_df, ["name", "version", "type"], ["name", "version", "type"], JoinType::Inner.into())?; 
+
+    // method 2
+    let sy_bd_clean_2_df = clean_sbom_df
+        .clone()
+        .lazy()
+        .join(
+            syft_sbom_df.clone().lazy(), 
+            [col("name"), col("version"), col("type")], 
+            [col("name"), col("version"), col("type")], 
+            JoinArgs::new(JoinType::Inner),
+        ).collect()?;  
+
+        let sy_bd_complete_2_df = complete_sbom_df
+        .clone()
+        .lazy()
+        .join(
+            syft_sbom_df.clone().lazy(), 
+            [col("name"), col("version"), col("type")], 
+            [col("name"), col("version"), col("type")], 
+            JoinArgs::new(JoinType::Inner),
+        ).collect()?;  
+
+    println!("------------------------------------------------");
+
+    println!("{:?}", sy_bd_clean_df);
+    println!("{:?}", sy_bd_complete_df);
+
+    println!("{:?}", sy_bd_clean_2_df);
+    println!("{:?}", sy_bd_complete_2_df);
+    println!("{:?}", clean_vuln_df);
+    println!("{:?}", complete_vuln_df);
+    // println!("{:?}", syft_df);
+    // println!("{:?}", joined_df.get_column_names());
+    // println!("{:?}", joined_df);
+    // println!("{:?}", non_matching_df);
+    println!("------------------------------------------------");
+
+    // let file_path = "blacklist_blackduck.csv";
+
+    // let file = File::create(file_path)?;
+
+    // let mut non_match_df = non_matching_df.clone();
+
+    // CsvWriter::new(file).include_header(true).finish(&mut non_match_df)?;
+
+
 
     Ok(())
 }
 
 
+// ! Not generic function, Not used anymore
 #[allow(dead_code)]
 pub async fn read_database(pool: &SqlitePool) -> Result<(), sqlx::Error> {
     // Print whitelist table
@@ -82,6 +167,7 @@ pub async fn read_database(pool: &SqlitePool) -> Result<(), sqlx::Error> {
 //     println!("{:?}", df);
 //     Ok(())
 // }
+
 
 pub async fn read_table_dataframe(
     pool: &SqlitePool,
@@ -145,110 +231,3 @@ pub async fn read_table_dataframe(
 
     Ok(df)
 }
-
-#[derive(Debug, Deserialize)]
-pub struct Component {
-    name: String,
-    version: String,
-    #[serde(rename = "type")]
-    component_type: String,
-    licenses: Option<Vec<License>>,
-    supplier: Option<Supplier>,
-    properties: Option<Vec<Property>>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct License {
-    license: LicenseInfo,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct LicenseInfo {
-    id: Option<String>,
-    _name: Option<String>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Supplier {
-    name: Option<String>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Property {
-    name: String,
-    value: String,
-}
-
-pub async fn read_json_dataframe(file_path: &str) -> Result<DataFrame, Box<dyn std::error::Error>> {
-    // Read the JSON file asynchronously
-    let mut file = TokioFile::open(file_path).await?;
-    let mut contents = String::new();
-    file.read_to_string(&mut contents).await?;
-
-    let v: Value = serde_json::from_str(&contents)?;
-
-    // Extract components array
-    let components = v["components"].as_array().unwrap();
-
-    // Initialize vectors for DataFrame columns
-    let mut names = Vec::new();
-    let mut versions = Vec::new();
-    let mut types = Vec::new();
-    let mut licenses = Vec::new();
-    let mut suppliers = Vec::new();
-    let mut properties = Vec::new();
-
-    for component in components {
-        let component: Component = serde_json::from_value(component.clone())?;
-        names.push(component.name.clone());
-        versions.push(component.version.clone());
-        types.push(component.component_type.clone());
-
-        // Handle multiple licenses
-        let license_str = component
-            .licenses
-            .as_ref()
-            .map_or("None".to_string(), |lics| {
-                lics.iter()
-                    .map(|lic| lic.license.id.clone().unwrap_or_else(|| "None".to_string()))
-                    .collect::<Vec<String>>()
-                    .join(", ")
-            });
-        licenses.push(license_str);
-
-        // Handle supplier
-        let supplier_str = component
-            .supplier
-            .as_ref()
-            .map_or("None".to_string(), |sup| {
-                sup.name.clone().unwrap_or_else(|| "None".to_string())
-            });
-        suppliers.push(supplier_str);
-
-        // Handle properties
-        let properties_str = component
-            .properties
-            .as_ref()
-            .map_or("None".to_string(), |props| {
-                props
-                    .iter()
-                    .map(|prop| format!("{}: {}", prop.name, prop.value))
-                    .collect::<Vec<String>>()
-                    .join(", ")
-            });
-        properties.push(properties_str);
-    }
-
-    // Create DataFrame
-    let df = df![
-        "name" => names,
-        "version" => versions,
-        "type" => types,
-        "licenses" => licenses,
-        "supplier" => suppliers,
-        "properties" => properties,
-    ]?;
-
-    Ok(df)
-}
-

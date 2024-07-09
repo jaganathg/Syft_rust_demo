@@ -1,16 +1,19 @@
 use serde::{Deserialize, Serialize};
-use serde_json;
 use sqlx::SqlitePool;
 use std::fs;
 use std::path::Path;
 
-use database::{action, init};
-use scanner::scan;
-use reader::read;
+use scanner::scan::{run_syft_scan, run_grype_valner};
+use database::init::initialize_db;
+use database::action::{check_duplicates, add_to_table};
+// use reader::readf::read_table_dataframe;
+
 
 mod database;
 mod scanner;
-mod reader;
+// mod reader;
+
+
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Package {
@@ -44,8 +47,8 @@ async fn main() {
     let syft_output = "syft_final.json";
     let grype_output = "grype_final.json";
 
-    scan::run_syft_scan(target, inter_output, &syft_output);
-    scan::run_grype_valner(&syft_output, &grype_output);
+    run_syft_scan(target, inter_output, &syft_output);
+    run_grype_valner(&syft_output, &grype_output);
 
     let db_url = "db/packages.db";
     let mut pool: Option<SqlitePool> = None;
@@ -53,7 +56,7 @@ async fn main() {
     // create database if not exist
     if !Path::new(db_url).exists() {
         println!("Database not found, initializing...");
-        init::initialize_db(db_url)
+        initialize_db(db_url)
             .await
             .expect("Failed to initialize db");
     } else {
@@ -101,11 +104,11 @@ async fn main() {
 
     for component in sbom.components {
         let exists =
-            action::check_duplicates(&pool, &component.name, &component.version, "current")
+            check_duplicates(&pool, &component.name, &component.version, "current")
                 .await
                 .expect("Failed to check duplicates");
         if !exists {
-            action::add_to_table(&pool, &component.name, &component.version, "current")
+            add_to_table(&pool, &component.name, &component.version, "current")
                 .await
                 .expect("Failed to add to current");
         }
@@ -118,15 +121,15 @@ async fn main() {
     //     .await
     //     .expect("Failed to read database");
 
-    let current_df = read::read_table_dataframe(&pool, "current")
-        .await
-        .expect("Failed to read database using Polars");
-    println!("{:?}", current_df);
+    // let current_df = read_table_dataframe(&pool, "current")
+    //     .await
+    //     .expect("Failed to read database using Polars");
+    // println!("{:?}", current_df);
 
-    let component_df = read::read_table_dataframe(&pool, "component")
-        .await
-        .expect("Failed to read database using Polars");
-    println!("{:?}", component_df);
+    // let component_df = read_table_dataframe(&pool, "component")
+    //     .await
+    //     .expect("Failed to read database using Polars");
+    // println!("{:?}", component_df);
 
     // drop table
     // database::drop_table(&pool, "whitelist")

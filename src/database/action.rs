@@ -4,6 +4,8 @@ use std::fs;
 #[allow(unused_imports)]
 use std::path::Path;
 
+
+
 pub async fn add_to_table(
     pool: &SqlitePool,
     package: &str,
@@ -45,6 +47,8 @@ pub async fn check_duplicates(
         .bind(version)
         .fetch_one(pool)
         .await?;
+
+    
 
     Ok(result > 0)
 }

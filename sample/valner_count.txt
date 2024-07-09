@@ -1,0 +1,11 @@
+0031_valner results.
+
+165 vulnerability matches
+
+by severity: 11 critical, 83 high, 55 medium, 8 low, 0 negligible (8 unknown)
+
+by status:   55 fixed, 110 not-fixed, 0 ignored 
+
+// log-level for syft and filtered valner report
+syft <image-or-directory> -o cyclonedx-json --include-applications --include-licenses --log-level debug 
+--output-file sbom.cyclonedx.json && grype sbom.cyclonedx.json -o json --fail-on high --file vulnerabilities.json
