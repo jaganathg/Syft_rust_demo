@@ -2,6 +2,9 @@ File Name,Author
 zutil.h,"Jean-loup Gailly, Mark Adler"
 inftrees.h,Mark Adler
 inflate.c,Mark Adler
+tester.h,Oliver
+minigzip.c,Jean-loup Gailly
+jtest.c,Jaganath
 compress.c,"Jean-loup Gailly, Mark Adler"
 deflate.c,Jean-loup Gailly and Mark Adler
 gzread.c,Mark Adler

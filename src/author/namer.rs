@@ -3,78 +3,62 @@ use std::error::Error;
 use std::fs;
 use std::io::{self, BufRead};
 use std::path::Path;
+use walkdir::WalkDir;
 
 trait FileParser {
     fn extract_author(&self, file_path: &Path) -> Option<String>;
 }
 
-struct CFileParser;
+struct GenericFileParser {
+    re:Regex,
+}
 
-impl FileParser for CFileParser {
+impl GenericFileParser {
+    fn new() -> Self {
+        Self {
+            re: Regex::new(r"Copyright\s+\(C\)\s+\d{4}(?:-\d{4})?(?:,\s*\d{4})*(?:,\s*\d{4})?\s+(.*)")
+            .unwrap(),
+        }
+    }
+} 
+
+impl FileParser for GenericFileParser {
     fn extract_author(&self, file_path: &Path) -> Option<String> {
-        let re =
-            Regex::new(r"Copyright\s+\(C\)\s+\d{4}(?:-\d{4})?(?:,\s*\d{4})*(?:,\s*\d{4})?\s+(.*)")
-                .unwrap();
-        extract_author_from_file(file_path, &re)
+        if let Ok(file) = fs::File::open(file_path) {
+            for line in io::BufReader::new(file).lines() {
+                if let Ok(line) = line {
+                    if let Some(caps) = self.re.captures(&line) {
+                        return Some(caps[1].to_string());
+                    }
+                }
+            }
+        }
+        None
     }
 }
 
-struct HFileParser;
-
-impl FileParser for HFileParser {
-    fn extract_author(&self, file_path: &Path) -> Option<String> {
-        let re =
-            Regex::new(r"Copyright\s+\(C\)\s+\d{4}(?:-\d{4})?(?:,\s*\d{4})*(?:,\s*\d{4})?\s+(.*)")
-                .unwrap();
-        extract_author_from_file(file_path, &re)
-    }
+fn get_parser() -> Box<dyn FileParser> {
+    Box::new(GenericFileParser::new())
 }
 
-fn extract_author_from_file(file_path: &Path, re: &Regex) -> Option<String> {
-    if let Ok(file) = fs::File::open(file_path) {
-        for line in io::BufReader::new(file).lines() {
-            if let Ok(line) = line {
-                if let Some(caps) = re.captures(&line) {
-                    return Some(caps[1].to_string());
+fn process_files_in_directory(directory: &Path) -> Vec<(String, String)> {
+    let parser = get_parser();
+    let mut results = Vec::new();
+
+    for entry in WalkDir::new(directory).into_iter().filter_map(|e| e.ok()) {
+        let path = entry.path();
+        if path.is_file() {
+            if let Some(extension) = path.extension() {
+                if extension == "c" || extension == "h" {
+                    if let Some(author) = parser.extract_author(path) {
+                        let file_name = path.file_name().unwrap().to_str().unwrap().to_string();
+                        results.push((file_name, author));
+                    }
                 }
             }
         }
     }
-    None
-}
-
-fn get_parser(file_extension: &str) -> Box<dyn FileParser> {
-    match file_extension {
-        "c" => Box::new(CFileParser),
-        "h" => Box::new(HFileParser),
-        // Add other file types and parsers here
-        _ => panic!("Unsupported file type"),
-    }
-}
-
-fn process_files_in_directory(directory: &Path) -> Vec<(String, String)> {
-    if !directory.is_dir() {
-        return vec![];
-    }
-
-    fs::read_dir(directory)
-        .unwrap()
-        .filter_map(|entry| entry.ok())
-        .filter_map(|entry| {
-            let path = entry.path();
-            if path.is_file() {
-                if let Some(extension) = path.extension() {
-                    if let Some(extension_str) = extension.to_str() {
-                        let parser = get_parser(extension_str);
-                        if let Some(author) = parser.extract_author(&path) {
-                            return Some((path.file_name()?.to_str()?.to_string(), author));
-                        }
-                    }
-                }
-            }
-            None
-        })
-        .collect()
+    results
 }
 
 fn write_to_csv(file_name: &str, data: Vec<(String, String)>) -> Result<(), Box<dyn Error>> {
@@ -88,6 +72,7 @@ fn write_to_csv(file_name: &str, data: Vec<(String, String)>) -> Result<(), Box<
     wtr.flush()?;
     Ok(())
 }
+
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
