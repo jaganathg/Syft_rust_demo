@@ -3,17 +3,14 @@ use sqlx::SqlitePool;
 use std::fs;
 use std::path::Path;
 
-use scanner::scan::{run_syft_scan, run_grype_valner};
+use database::action::{add_to_table, check_duplicates};
 use database::init::initialize_db;
-use database::action::{check_duplicates, add_to_table};
+use scanner::scan::{run_grype_valner, run_syft_scan};
 // use reader::readf::read_table_dataframe;
-
 
 mod database;
 mod scanner;
 // mod reader;
-
-
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Package {
@@ -103,10 +100,9 @@ async fn main() {
     let sbom: CycloneDxSbom = serde_json::from_str(&data).expect("Failed to parse final.json");
 
     for component in sbom.components {
-        let exists =
-            check_duplicates(&pool, &component.name, &component.version, "current")
-                .await
-                .expect("Failed to check duplicates");
+        let exists = check_duplicates(&pool, &component.name, &component.version, "current")
+            .await
+            .expect("Failed to check duplicates");
         if !exists {
             add_to_table(&pool, &component.name, &component.version, "current")
                 .await

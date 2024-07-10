@@ -39,18 +39,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let syft_sbom_df = read_sbom_sy_dataframe(&file_path_syft).await?;
 
-    println!(" BD clean sbom");
+    println!("*** BlackDuck clean sbom ***");
     println!("{:?}", clean_sbom_df);
-    println!(" BD complete sbom");
+    println!("*** BlackDuck complete sbom including blacklisted packages ***");
     println!("{:?}", complete_sbom_df);
-    println!(" SY complete sbom");
+    println!("*** OUR: SBOM created internaly out of same software repo ***");
     println!("{:?}", syft_sbom_df);
 
-    let joined_df = complete_sbom_df.left_join(&clean_sbom_df, ["name"], ["name"])?;
+    // let joined_df = complete_sbom_df.left_join(&clean_sbom_df, ["name"], ["name"])?;
 
-    let non_matching_df = joined_df
-        .filter(&joined_df.column("type_right")?.is_null())?
-        .select(&["name", "version", "type", "licenses", "supplier", "purl"])?;
+    // let non_matching_df = joined_df
+    //     .filter(&joined_df.column("type_right")?.is_null())?
+    //     .select(&["name", "version", "type", "licenses", "supplier", "purl"])?;
 
     // let joined_df = complete_df.join(&clean_df, &["name"], &["name"], JoinArgs {how: JoinType::Full, ..Default::default() })?;
 
@@ -58,39 +58,52 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     //     &joined_df.column("type_right")?.is_null() ,
     // )?;
     // method 1
-    let sy_bd_clean_df = clean_sbom_df.join(&syft_sbom_df, ["name", "version", "type"], ["name", "version", "type"], JoinType::Inner.into())?; 
-    let sy_bd_complete_df = complete_sbom_df.join(&syft_sbom_df, ["name", "version", "type"], ["name", "version", "type"], JoinType::Inner.into())?; 
+    // let sy_bd_clean_df = clean_sbom_df.join(
+    //     &syft_sbom_df,
+    //     ["name", "version", "type"],
+    //     ["name", "version", "type"],
+    //     JoinType::Inner.into(),
+    // )?;
+    // let sy_bd_complete_df = complete_sbom_df.join(
+    //     &syft_sbom_df,
+    //     ["name", "version", "type"],
+    //     ["name", "version", "type"],
+    //     JoinType::Inner.into(),
+    // )?;
 
     // method 2
     let sy_bd_clean_2_df = clean_sbom_df
         .clone()
         .lazy()
         .join(
-            syft_sbom_df.clone().lazy(), 
-            [col("name"), col("version"), col("type")], 
-            [col("name"), col("version"), col("type")], 
+            syft_sbom_df.clone().lazy(),
+            [col("name"), col("version"), col("type")],
+            [col("name"), col("version"), col("type")],
             JoinArgs::new(JoinType::Inner),
-        ).collect()?;  
+        )
+        .collect()?;
 
-        let sy_bd_complete_2_df = complete_sbom_df
+    let sy_bd_complete_2_df = complete_sbom_df
         .clone()
         .lazy()
         .join(
-            syft_sbom_df.clone().lazy(), 
-            [col("name"), col("version"), col("type")], 
-            [col("name"), col("version"), col("type")], 
+            syft_sbom_df.clone().lazy(),
+            [col("name"), col("version"), col("type")],
+            [col("name"), col("version"), col("type")],
             JoinArgs::new(JoinType::Inner),
-        ).collect()?;  
+        )
+        .collect()?;
 
     println!("------------------------------------------------");
 
-    println!("{:?}", sy_bd_clean_df);
-    println!("{:?}", sy_bd_complete_df);
-
+    // println!("{:?}", sy_bd_clean_df);
+    // println!("{:?}", sy_bd_complete_df);
+    println!("*** OUR vs BlackDuck Clean ***");
     println!("{:?}", sy_bd_clean_2_df);
+    println!("*** OUR vs BlackDuck Complete ***");
     println!("{:?}", sy_bd_complete_2_df);
-    println!("{:?}", clean_vuln_df);
-    println!("{:?}", complete_vuln_df);
+    // println!("{:?}", clean_vuln_df);
+    // println!("{:?}", complete_vuln_df);
     // println!("{:?}", syft_df);
     // println!("{:?}", joined_df.get_column_names());
     // println!("{:?}", joined_df);
@@ -105,11 +118,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // CsvWriter::new(file).include_header(true).finish(&mut non_match_df)?;
 
-
-
     Ok(())
 }
-
 
 // ! Not generic function, Not used anymore
 #[allow(dead_code)]
@@ -167,7 +177,6 @@ pub async fn read_database(pool: &SqlitePool) -> Result<(), sqlx::Error> {
 //     println!("{:?}", df);
 //     Ok(())
 // }
-
 
 pub async fn read_table_dataframe(
     pool: &SqlitePool,

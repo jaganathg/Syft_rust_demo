@@ -1,16 +1,12 @@
+use clap::{Arg, Command};
 use sqlx::{query, SqlitePool};
 use sqlx::{sqlite::SqlitePoolOptions, Error};
-use std::{fs, process};
 use std::path::Path;
-use clap::{Arg, Command};
-
-
-
+use std::{fs, process};
 
 #[allow(dead_code)]
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-
     run().await
 }
 
@@ -60,15 +56,16 @@ pub async fn initialize_db(db_url: &str) -> Result<SqlitePool, sqlx::Error> {
 }
 
 async fn run() -> Result<(), Error> {
-
     let flager = Command::new("init_db")
         .version("1.0")
         .about("Initializes the database")
-        .arg(Arg::new("reset")
-            .short('r')
-            .long("reset")
-            .help("Recreate all tables even if they exist")
-            .num_args(0))
+        .arg(
+            Arg::new("reset")
+                .short('r')
+                .long("reset")
+                .help("Recreate all tables even if they exist")
+                .num_args(0),
+        )
         .get_matches();
 
     let reset_flag = flager.get_one::<bool>("reset").copied().unwrap_or(false);
@@ -100,7 +97,10 @@ async fn run() -> Result<(), Error> {
     Ok(())
 }
 
-async fn reinitialize_tables(pool: &sqlx::SqlitePool, init_table: &str) -> Result<(), Box<dyn std::error::Error>> {
+async fn reinitialize_tables(
+    pool: &sqlx::SqlitePool,
+    init_table: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
     // Extract table names from the SQL script
     let table_names = extract_table_names(init_table);
     println!("Tables to reinitialize: {:?}", table_names);

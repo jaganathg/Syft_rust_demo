@@ -1,0 +1,25 @@
+File Name,Author
+zutil.h,"Jean-loup Gailly, Mark Adler"
+inftrees.h,Mark Adler
+inflate.c,Mark Adler
+compress.c,"Jean-loup Gailly, Mark Adler"
+deflate.c,Jean-loup Gailly and Mark Adler
+gzread.c,Mark Adler
+inffast.h,Mark Adler
+crc32.c,Mark Adler
+infback.c,Mark Adler
+zutil.c,Jean-loup Gailly
+deflate.h,Jean-loup Gailly
+gzguts.h,Mark Adler
+zlib.h,Jean-loup Gailly and Mark Adler
+gzlib.c,Mark Adler
+inflate.h,Mark Adler
+inftrees.c,Mark Adler
+uncompr.c,"Jean-loup Gailly, Mark Adler"
+gzwrite.c,Mark Adler
+trees.c,Jean-loup Gailly
+gzclose.c,Mark Adler
+crc32.h,"by Sun Microsystems, Inc"
+inffast.c,Mark Adler
+adler32.c,Mark Adler
+zconf.h,"Jean-loup Gailly, Mark Adler"
