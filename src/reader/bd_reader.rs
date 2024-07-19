@@ -27,6 +27,7 @@ pub struct Component {
     licenses: Option<Vec<License>>,
     supplier: Option<Supplier>,
     purl: Option<String>,
+    pedigree: Option<Pedigree>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -42,6 +43,11 @@ pub struct LicenseInfo {
 #[derive(Debug, Deserialize)]
 pub struct Supplier {
     name: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Pedigree {
+    notes: Option<String>,
 }
 
 
@@ -64,6 +70,7 @@ pub async fn read_sbom_bd_dataframe(file_path: &str) -> Result<DataFrame, Box<dy
     let mut licenses = Vec::new();
     let mut suppliers = Vec::new();
     let mut purl = Vec::new();
+    let mut pedigree = Vec::new();
 
 
     for component in components {
@@ -94,6 +101,15 @@ pub async fn read_sbom_bd_dataframe(file_path: &str) -> Result<DataFrame, Box<dy
             });
         suppliers.push(supplier_str);
 
+        // Handle pedigree
+        let pedigree_str = component
+            .pedigree
+            .as_ref()
+            .map_or("None".to_string(), |ped| {
+                ped.notes.clone().unwrap_or_else(|| "None".to_string())
+            });
+        pedigree.push(pedigree_str);
+
         
     }
     
@@ -106,6 +122,7 @@ pub async fn read_sbom_bd_dataframe(file_path: &str) -> Result<DataFrame, Box<dy
         "licenses" => licenses,
         "supplier" => suppliers,
         "purl" => purl,
+        "pedigree" => pedigree,
     ]?;
 
     Ok(df)

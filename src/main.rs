@@ -10,6 +10,7 @@ use scanner::scan::{run_grype_valner, run_syft_scan};
 
 mod database;
 mod scanner;
+mod cyclonedx_exporter;
 // mod reader;
 
 #[derive(Debug, Serialize, Deserialize)]

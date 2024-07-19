@@ -1,0 +1,73 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "version": 1,
+  "serialNumber": "urn:uuid:2d9a863b-b74a-4dcd-b1cf-f7a2ec451974",
+  "metadata": {
+    "timestamp": "2024-07-18T18:31:01.761646000Z",
+    "authors": [
+      {
+        "name": "Accenture GmbH",
+        "email": "psirt@accenture.com"
+      }
+    ],
+    "properties": [
+      {
+        "name": "sourcingNr",
+        "value": "AU2018003773"
+      },
+      {
+        "name": "vorgangsbezeichnung",
+        "value": "Beauftragung XYZ"
+      },
+      {
+        "name": "vehicleproject",
+        "value": "AU123"
+      }
+    ]
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "46b37790-c246-4cae-badc-d560d4dd0464",
+      "name": "ahash",
+      "version": "0.7.6",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:cargo/ahash@0.7.6",
+      "pedigree": {
+        "notes": "MIT License"
+      }
+    }
+  ],
+  "vulnerabilities": [
+    {
+      "bom-ref": "46b37790-c246-4cae-badc-d560d4dd0464",
+      "id": "CVE-2014-0069",
+      "source": {
+        "name": "NVD"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.2,
+          "severity": "high",
+          "method": "CVSSv3"
+        }
+      ],
+      "description": "Need to check , how to fill this attribute valid text",
+      "affects": [
+        {
+          "ref": "46b37790-c246-4cae-badc-d560d4dd0464"
+        }
+      ]
+    }
+  ]
+}

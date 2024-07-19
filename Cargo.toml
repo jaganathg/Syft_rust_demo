@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.5.8", features = ["derive"] }
 csv = "1.3.0"
+cyclonedx-bom = "0.6.2"
 diesel = { version = "2.2.1", features = ["chrono", "sqlite"] }
 diesel_migrations = "2.2.0"
 dotenvy = "0.15.7"
@@ -27,9 +28,9 @@ path = "src/main.rs"
 name = "init_db"
 path = "src/database/init.rs"
 
-[[bin]]
-name = "json_df"
-path = "src/reader/readf.rs"
+# [[bin]]
+# name = "json_df"
+# path = "src/reader/readf.rs"
 
 [[bin]]
 name = "namer"
@@ -42,3 +43,8 @@ path = "src/diesel/init.rs"
 [[bin]]
 name = "merger"
 path = "src/merger/json_merge.rs"
+
+[[bin]]
+name = "exporter"
+path = "src/cyclonedx_exporter/exporter.rs"
+
